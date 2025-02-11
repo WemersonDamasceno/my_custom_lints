@@ -27,13 +27,18 @@ class PreferAppButtonLint extends DartLintRule {
     ErrorReporter reporter,
     CustomLintContext context,
   ) async {
+    print("⚡ Executando PreferAppButtonLint...");
+
     final ResolvedUnitResult unit = await resolver.getResolvedUnitResult();
-    final List<SimpleIdentifier> elevatedButtonUsages =
+    final List<InstanceCreationExpression> elevatedButtonUsages =
         _findElevatedButtonUsages(unit);
+
+    print(
+        "🔍 Encontrados ${elevatedButtonUsages.length} usos de ElevatedButton");
 
     for (final usage in elevatedButtonUsages) {
       final int offset = usage.offset;
-      const int length = 'ElevatedButton'.length;
+      final int length = usage.constructorName.type.length;
       reporter.reportErrorForOffset(
         code,
         offset,
@@ -42,23 +47,24 @@ class PreferAppButtonLint extends DartLintRule {
     }
   }
 
-  List<SimpleIdentifier> _findElevatedButtonUsages(ResolvedUnitResult unit) {
-    final List<SimpleIdentifier> usages = [];
+  List<InstanceCreationExpression> _findElevatedButtonUsages(
+      ResolvedUnitResult unit) {
+    final List<InstanceCreationExpression> usages = [];
     unit.unit.accept(_Visitor(usages));
     return usages;
   }
 }
 
 class _Visitor extends RecursiveAstVisitor<void> {
-  final List<SimpleIdentifier> usages;
+  final List<InstanceCreationExpression> usages;
 
   _Visitor(this.usages);
 
   @override
-  void visitSimpleIdentifier(SimpleIdentifier node) {
-    if (node.name == 'ElevatedButton') {
-      usages.add(node); // Adiciona o nó (node) ao invés de apenas o nome
+  void visitInstanceCreationExpression(InstanceCreationExpression node) {
+    if (node.constructorName.type.toString() == 'ElevatedButton') {
+      usages.add(node);
     }
-    super.visitSimpleIdentifier(node);
+    super.visitInstanceCreationExpression(node);
   }
 }
