@@ -1,0 +1,22 @@
+name: my_custom_lints
+description: "A new Flutter package project."
+version: 1.0.1
+homepage:
+
+environment:
+  sdk: ">=3.0.6 < 4.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter  
+  analyzer: 5.13.0
+  analyzer_plugin: 0.11.2
+  custom_lint_builder: 0.5.11
+  custom_lint: 0.5.11
+  flutter_lints: ^4.0.0
+
+
+flutter:
+  assets:
+    - analysis_options.yaml
+
