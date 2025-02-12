@@ -16,10 +16,11 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
-
-  flutter_lints: ^4.0.0
+  dev_dependencies:
   my_custom_lints:
-    path: ../my_custom_lints
+    git:
+      url: https://github.com/WemersonDamasceno/my_custom_lints.git
+      ref: main
 
 flutter:
   uses-material-design: true
